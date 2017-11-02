@@ -1,17 +1,26 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from "@angular/platform-browser";
+import {CommonModule} from "@angular/common";
 
-import { AppComponent } from './app.component';
+//Custom Modules
+import {DashboardModule} from "./dashboard/dashboard.module";
+
+//Custom Component
+import {AppComponent} from "./app.component";
+
 
 @NgModule({
-  imports: [
-    BrowserModule
-  ],
-  bootstrap: [
-    AppComponent
-  ],
-  declarations: [
-    AppComponent
-  ]
+    declarations: [
+      AppComponent
+    ],
+    imports: [
+        //Angular Modules
+        BrowserModule,
+        CommonModule,
+
+        //Custom Modules
+        DashboardModule
+    ],
+    bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule{}
