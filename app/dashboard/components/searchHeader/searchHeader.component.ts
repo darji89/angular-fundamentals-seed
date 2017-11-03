@@ -26,11 +26,19 @@ export class SearchHeaderComponent {
     @Output()
         onFilterChange: EventEmitter<any>;
 
+    @Output()
+        toggleEdit: EventEmitter<any>;
+
     constructor() {
         this.onFilterChange = new EventEmitter();
-    }
+        this.toggleEdit = new EventEmitter();
+    };
 
     handleInputChange = (value: string) => {
         this.onFilterChange.emit(value);
-    }
+    };
+
+    handleClick = () => {
+        this.toggleEdit.emit();
+    };
 }

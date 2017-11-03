@@ -17,7 +17,8 @@ import {People} from "../../models/interfaces";
 
                 <searchHeader-component
                     [searchQuery] = "(searchQuery)"
-                    (onFilterChange) ="(handleFilterList($event))">
+                    (onFilterChange) ="(handleFilterList($event))"
+                    (toggleEdit) = "(handleToggleEdit($event))">
 
                 </searchHeader-component>
             </div>
@@ -31,8 +32,9 @@ import {People} from "../../models/interfaces";
             </div>
             <div class="tableContainer">
                 <tableItem-component
-                        *ngFor="let passenger of passengerList"
-                        [detail]="passenger">
+                    *ngFor = "let passenger of passengerList"
+                    [detail] = "passenger"
+                    [editable] = "(editMode)">
 
                 </tableItem-component>
             </div>
@@ -45,15 +47,17 @@ export class DashboardComponent implements OnInit{
     @Input()
         passengers: People[];
 
+    editMode: boolean = false;
     passengerList: People[];
     searchQuery: string;
 
     constructor() {
-        this.searchQuery = null;
     };
 
     ngOnInit () {
+        this.editMode = false;
         this.passengerList = [...this.passengers];
+        this.searchQuery = null;
     }
 
     checkedInAmount = () => {
@@ -62,6 +66,11 @@ export class DashboardComponent implements OnInit{
         }
 
         return this.passengers.filter((passenger: People)=> passenger.checkedIn == true).length;
+    };
+
+    handleToggleEdit = () => {
+        console.log('ddddd');
+        this.editMode = !this.editMode;
     };
 
     handleFilterList = (queryValue: string) => {
