@@ -1,4 +1,4 @@
-import {Component, Input} from "@angular/core";
+import {Component, Input, OnInit} from "@angular/core";
 import {People} from "../../models/interfaces";
 
 @Component({
@@ -8,35 +8,18 @@ import {People} from "../../models/interfaces";
         <div class="dashboardComponent">
             <h1>{{title}}</h1>
             
-            <counter-component
-                [total]="(passengers?.length)"
-                [valid]="(checkedInAmount())" >
-                
-            </counter-component>
+            <div class="topHeader">
+                <counter-component
+                    [total] = "(passengers?.length)"
+                    [valid] = "(checkedInAmount())">
 
-            <div class="searchBox">
-                <input
-                        #nameInput
-                        type = "text"
-                        placeholder = "search for name"
-                        [value] = "(nameInputValue)"
-                        (input) = "handleInputChange('nameInputValue', nameInput.value)"/>
+                </counter-component>
 
-                <input
-                        #idInput
-                        type = "text"
-                        placeholder = "search by id"
-                        [(ngModel)] ="idInputValue"/>
+                <searchHeader-component
+                    [searchQuery] = "(searchQuery)"
+                    (onFilterChange) ="(handleFilterList($event))">
 
-                <button
-                        (click) = "(handleClick())" >
-                    Search!
-                </button>
-            </div>
-            <div class="searchingBox">
-                <div *ngIf="(idInputValue?.length > 0) || (nameInputValue?.length) > 0">
-                    Searching...
-                </div>
+                </searchHeader-component>
             </div>
 
             <div class="listHeader">
@@ -48,21 +31,30 @@ import {People} from "../../models/interfaces";
             </div>
             <div class="tableContainer">
                 <tableItem-component
-                        *ngFor="let passenger of passengers"
+                        *ngFor="let passenger of passengerList"
                         [detail]="passenger">
 
                 </tableItem-component>
             </div>
+            
         </div>
     `
 })
 
-export class DashboardComponent{
+export class DashboardComponent implements OnInit{
     @Input()
-    passengers: People[];
+        passengers: People[];
+
+    passengerList: People[];
+    searchQuery: string;
 
     constructor() {
+        this.searchQuery = null;
     };
+
+    ngOnInit () {
+        this.passengerList = [...this.passengers];
+    }
 
     checkedInAmount = () => {
         if(!this.passengers) {
@@ -70,6 +62,21 @@ export class DashboardComponent{
         }
 
         return this.passengers.filter((passenger: People)=> passenger.checkedIn == true).length;
+    };
+
+    handleFilterList = (queryValue: string) => {
+        this.passengerList = this.passengers.filter( (passenger, i) => {
+            let x = false;
+
+            for (let key in passenger) {
+
+                if (passenger[key].toString().toLowerCase().indexOf(queryValue.toLocaleLowerCase()) !== -1) {
+                   x = true
+                }
+            }
+
+            return x
+        })
     }
 
 }

@@ -2,15 +2,13 @@
   height: 95%;
 }
 
-.searchBox {
-  margin-bottom: 30px;
-  input {
-    margin-right: 20px;
-  }
-}
-
-.searchingBox {
-  margin-bottom: 20px;
+.topHeader {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  padding: 0 16px;
 }
 
 .listHeader {
