@@ -1,11 +1,12 @@
-import {Component, Input} from "@angular/core";
+import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {People} from "../../../models/interfaces";
+import {keyValDiff} from "@angular/core/src/change_detection/change_detection";
 
 @Component({
     selector: 'tableItem-component',
     styleUrls: ['tableItem.component.scss'],
     template: `
-        <div class = "listItem" *ngIf="(!editable)">
+        <div class = "listItem" *ngIf="(!editMode)">
             <div class="checked"[ngClass]="{checkedIn: detail.checkedIn}"></div>
             <div>{{detail.firstName}}</div>
             <div>{{detail.lastName}}</div>
@@ -16,9 +17,14 @@ import {People} from "../../../models/interfaces";
                     {{child.firstName}}, 
                 </span>
             </div>
+            <div style="flex: 0 0 130px;">
+               <button (click)="toggleEdit()">
+                   EDIT
+               </button>
+            </div>
         </div>
 
-        <div class = "listItem" *ngIf="(editable)">
+        <div class = "listItem" *ngIf="(editMode)">
             <div class="checked"[ngClass]="{checkedIn: detail.checkedIn}"></div>
             <div>
                 <input
@@ -41,18 +47,37 @@ import {People} from "../../../models/interfaces";
                     {{child.firstName}}, 
                 </span>
             </div>
+            <div style="flex: 0 0 130px;">
+                <button (click)="toggleEdit()">
+                    Done
+                </button>
+                <button (click)="deleteItem()">
+                    Delete
+                </button>
+            </div>
         </div>
     `
 })
 
 export class TableItemComponent{
     @Input()
-    detail: People;
+        detail: People;
 
-    @Input()
-    editable: boolean;
+    @Output()
+    onRemoveFromList: EventEmitter<any>;
 
-    constructor() {}
+    editMode: boolean;
 
+    constructor() {
+        this.editMode = false;
+        this.onRemoveFromList = new EventEmitter();
+    }
 
+    toggleEdit = () => {
+        this.editMode = !this.editMode;
+    }
+
+    deleteItem = () => {
+        this.onRemoveFromList.emit(this.detail.id);
+    }
 }

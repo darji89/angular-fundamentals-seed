@@ -11,10 +11,6 @@ import {Component, Input, Output, EventEmitter} from "@angular/core";
                     placeholder = "search here..."
                     [value] = "(searchQuery)"
                     (input) = "handleInputChange(searchInput.value)"/>
-
-            <button (click) = "(handleClick())" >
-                Edit
-            </button>
         </div>
     `
 })
@@ -26,19 +22,12 @@ export class SearchHeaderComponent {
     @Output()
         onFilterChange: EventEmitter<any>;
 
-    @Output()
-        toggleEdit: EventEmitter<any>;
-
     constructor() {
         this.onFilterChange = new EventEmitter();
-        this.toggleEdit = new EventEmitter();
     };
 
     handleInputChange = (value: string) => {
         this.onFilterChange.emit(value);
     };
 
-    handleClick = () => {
-        this.toggleEdit.emit();
-    };
 }

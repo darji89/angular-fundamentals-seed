@@ -17,8 +17,7 @@ import {People} from "../../models/interfaces";
 
                 <searchHeader-component
                     [searchQuery] = "(searchQuery)"
-                    (onFilterChange) ="(handleFilterList($event))"
-                    (toggleEdit) = "(handleToggleEdit($event))">
+                    (onFilterChange) ="(handleFilterList($event))">
 
                 </searchHeader-component>
             </div>
@@ -29,12 +28,13 @@ import {People} from "../../models/interfaces";
                 <div>birthday</div>
                 <div>e-mail</div>
                 <div>children</div>
+                <div style="flex: 0 0 130px;"></div>
             </div>
             <div class="tableContainer">
                 <tableItem-component
                     *ngFor = "let passenger of passengerList"
                     [detail] = "passenger"
-                    [editable] = "(editMode)">
+                    (onRemoveFromList) = "handleRemoveFromList($event)">
 
                 </tableItem-component>
             </div>
@@ -47,7 +47,6 @@ export class DashboardComponent implements OnInit{
     @Input()
         passengers: People[];
 
-    editMode: boolean = false;
     passengerList: People[];
     searchQuery: string;
 
@@ -55,7 +54,6 @@ export class DashboardComponent implements OnInit{
     };
 
     ngOnInit () {
-        this.editMode = false;
         this.passengerList = [...this.passengers];
         this.searchQuery = null;
     }
@@ -66,11 +64,6 @@ export class DashboardComponent implements OnInit{
         }
 
         return this.passengers.filter((passenger: People)=> passenger.checkedIn == true).length;
-    };
-
-    handleToggleEdit = () => {
-        console.log('ddddd');
-        this.editMode = !this.editMode;
     };
 
     handleFilterList = (queryValue: string) => {
@@ -85,6 +78,12 @@ export class DashboardComponent implements OnInit{
             }
 
             return x
+        })
+    };
+
+    handleRemoveFromList = (id: string) => {
+       this.passengerList = this.passengerList.filter(passenger =>{
+            return passenger.id !== id
         })
     }
 
